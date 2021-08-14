@@ -14,9 +14,42 @@
         border: 1px  solid blue;
         overflow: auto;
       }
+      button {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+        background: transparent;
+      }
     </style>
   </head>
   <body>
+    <h2>-------- 點擊事件速度 DEMO 手機才有明顯效果---------</h2>
+    <div class="clickWrap">
+      <p>此區塊監聽一般click，快速點擊不同button，背景變色時間會有明顯delay</p>
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button>7</button>
+      <button>8</button>
+    </div>
+    <div class="touchWrap">
+      <p>此區塊監聽touch，快速點擊不同button，背景變色時間會無明顯delay</p>
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button>7</button>
+      <button>8</button>
+    </div>
+
+
+
+    <h2>--------不當禁止，導致無法拖曳內容 DEMO---------</h2>
     <div class="div1">
       此區塊因為靜止了300ms等待，但內容已經超出可見區塊大小，剩餘內容都看不到
        此區塊因為靜止了300ms等待，但內容已經超出可見區塊大小，剩餘內容都看不到
@@ -57,11 +90,42 @@
 
     </div>
     <script>
-    document.querySelector(".div1").addEventListener("touchstart", function() {
-      event.preventDefault();
-      return false;
-    })
-alert(document.ontouchstart)
+    const isSupport = document.ontouchstart === null;
+    if (isSupport) {
+      alert("有支援touch")
+      document.querySelector(".div1").addEventListener("touchstart", function() {
+        event.preventDefault();
+        return false;
+      })
+      document.querySelectorAll(".clickWrap > button").forEach(function(item) {
+        item.addEventListener("click", function() {
+          const bg = event.target.style.backgroundColor;
+          if(bg === "pink") {
+            event.target.style.backgroundColor = "transparent";
+          } else {
+           event.target.style.backgroundColor = "pink";
+
+          }
+        })
+      })
+
+      document.querySelectorAll(".touchWrap > button").forEach(function(item) {
+        item.addEventListener("touchstart", function() {
+          event.preventDefault();
+          const bg = event.target.style.backgroundColor;
+          if(bg === "pink") {
+            event.target.style.backgroundColor = "transparent";
+          } else {
+           event.target.style.backgroundColor = "pink";
+
+          }
+        })
+      })
+    } else {
+      alert("不支援touch，離開吧");
+    }
+    
+    
     </script>
 
   </body>
